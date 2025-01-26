@@ -1,0 +1,21 @@
+@startuml
+left to right direction
+
+package "Football Ticket Booking System" {
+    actor User
+    actor Admin
+    actor Guest
+
+    User <|-- Admin : Specialization
+    User <|-- Guest : Specialization
+
+    (Book Ticket) <|-- (Book VIP Ticket) : Generalization
+    (Book Ticket) <|-- (Book Standard Ticket) : Generalization
+
+    User --> (Book Ticket)
+    Admin --> (Manage Matches)
+    Admin --> (Generate Reports)
+    Guest --> (Browse Matches)
+}
+
+@enduml

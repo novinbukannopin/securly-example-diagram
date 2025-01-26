@@ -1,0 +1,37 @@
+@startuml
+class User {
+    +id: int
+    +name: string
+    +email: string
+    +login(): void
+    +logout(): void
+}
+
+class Match {
+    +id: int
+    +team1: string
+    +team2: string
+    +date: Date
+    +getDetails(): string
+}
+
+class Ticket {
+    +id: int
+    +type: string
+    +price: float
+    +book(): void
+}
+
+class Booking {
+    +id: int
+    +userId: int
+    +matchId: int
+    +ticketId: int
+    +paymentStatus: string
+    +confirmBooking(): void
+}
+
+User "1" *-- "many" Booking
+Booking "1" *-- "1" Match
+Booking "1" *-- "1" Ticket
+@enduml

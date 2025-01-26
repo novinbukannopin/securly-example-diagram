@@ -1,0 +1,18 @@
+@startuml
+start
+:Open booking website;
+:Browse matches;
+if (Match selected?) then (Yes)
+  :View match details;
+  :Select ticket type;
+  if (User logged in?) then (Yes)
+    :Proceed to payment;
+    :Complete booking;
+  else (No)
+    :Prompt login/signup;
+  endif
+else (No)
+  :Exit system;
+endif
+stop
+@enduml

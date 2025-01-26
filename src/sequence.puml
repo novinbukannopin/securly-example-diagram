@@ -1,0 +1,20 @@
+@startuml
+actor User
+participant "Website" as Web
+participant "Payment Gateway" as Payment
+participant "Database" as DB
+
+User -> Web: Browse matches
+Web -> DB: Fetch match list
+DB --> Web: Return match list
+User -> Web: Select match
+Web -> DB: Fetch match details
+DB --> Web: Return match details
+
+User -> Web: Proceed to booking
+Web -> Payment: Initiate payment
+Payment --> Web: Confirm payment
+Web -> DB: Save booking details
+DB --> Web: Booking confirmed
+Web --> User: Display booking confirmation
+@enduml
