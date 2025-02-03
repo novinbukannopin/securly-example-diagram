@@ -1,0 +1,27 @@
+@startuml
+actor       User            as Foo1
+boundary    ProfilePage     as Foo2
+control     ProfileControl  as Foo3
+entity      UserEntity      as Foo4
+database    UserDB          as Foo5
+
+Foo1 -> Foo2 : Masukkan permintaan untuk melihat profil
+Foo2 -> Foo3 : Kirim permintaan data profil
+Foo3 -> Foo4 : Ambil data profil pengguna
+Foo4 -> Foo5 : Query data pengguna dari database
+Foo5 -> Foo4 : Kembalikan data profil pengguna
+Foo4 -> Foo3 : Kembalikan data profil
+Foo3 -> Foo2 : Tampilkan data profil
+Foo2 -> Foo1 : Tampilkan profil pengguna
+
+alt Update Profil
+    Foo1 -> Foo2 : Pilih untuk mengedit profil
+    Foo2 -> Foo3 : Kirim data profil yang baru
+    Foo3 -> Foo4 : Update data profil pengguna
+    Foo4 -> Foo5 : Simpan data baru di database
+    Foo5 -> Foo4 : Konfirmasi perubahan berhasil
+    Foo4 -> Foo3 : Kirim status perubahan berhasil
+    Foo3 -> Foo2 : Kirim status ke halaman
+    Foo2 -> Foo1 : Tampilkan profil yang diperbarui
+end
+@enduml

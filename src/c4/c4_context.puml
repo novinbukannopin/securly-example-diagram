@@ -1,0 +1,13 @@
+@startuml
+!includeurl https://raw.githubusercontent.com/plantuml-stdlib/C4-PlantUML/master/C4_Context.puml
+
+title System Context Diagram for URL Shortening Service
+
+Person(user, "User", "A person using the URL shortening service")
+System_Boundary(system_boundary, "URL Shortening System") {
+  System(system, "URL Shortening System", "Allows users to shorten URLs and provides security analysis")
+}
+
+Rel(user, system, "Uses", "HTTPS")
+
+@enduml

@@ -1,0 +1,44 @@
+@startuml
+
+start
+:Pengguna memasukkan Original URL;
+:API Deep Learning memeriksa keamanan URL;
+
+if (URL Valid?) then (Ya)
+    :Muncul hasil analisis (Aman, Berbahaya, atau Terblokir);
+
+    :Pengguna memberikan feedback (opsional);
+        note right
+        Jika "Aman", "Berbahaya", atau "Terblokir",
+        pengguna bisa memberikan alasan.
+        end note
+else (Tidak)
+    :Menampilkan pesan error "URL tidak valid";
+    stop
+endif
+
+:Pengguna mengisi atau generate Short URL/Alias;
+
+if (Alias sudah digunakan?) then (Ya)
+    :Menampilkan pesan error "Alias sudah dipakai";
+    :Pengguna mengubah alias atau generate ulang;
+endif
+
+:Pengguna menambahkan Tag (bisa lebih dari satu);
+:Pengguna menambahkan Keterangan;
+:Pengguna menyesuaikan warna QR Code;
+:Pengguna menambahkan parameter UTM (opsional);
+
+:Pengguna menekan tombol "Create Link";
+
+if (Penyimpanan data berhasil?) then (Ya)
+    :Sistem menyimpan data & menghasilkan URL pendek;
+    :Menampilkan URL pendek ke pengguna;
+else (Tidak)
+    :Menampilkan pesan error "Gagal menyimpan data";
+    stop
+endif
+
+stop
+
+@enduml

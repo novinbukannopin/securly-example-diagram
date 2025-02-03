@@ -1,0 +1,35 @@
+@startuml
+actor       User             as Foo1
+boundary    URLPage          as Foo2
+control     URLControl        as Foo3
+entity      URLHandler        as Foo4
+database    URLDB             as Foo5
+entity      DeepLearningAPI   as Foo6
+database    TagDB             as Foo7
+entity      QRCodeCustomizer  as Foo8
+
+Foo1 -> Foo2 : Masukkan URL asli
+Foo2 -> Foo3 : Kirim URL ke kontroler
+Foo3 -> Foo6 : Kirim URL untuk pengecekan keamanan
+Foo6 -> Foo3 : Kembalikan status keamanan URL
+alt URL aman
+    Foo3 -> Foo4 : Generate URL pendek
+else URL berbahaya / terblokir
+    Foo3 -> Foo2 : Tampilkan pesan error
+    Foo2 -> Foo1 : Tampilkan alasan URL berbahaya / terblokir
+end
+
+Foo3 -> Foo2 : Tampilkan hasil pengecekan
+Foo2 -> Foo1 : Tampilkan hasil pengecekan
+Foo1 -> Foo2 : Masukkan alias atau pilih "Generate" untuk otomatis
+Foo2 -> Foo3 : Kirim alias / request generate otomatis
+Foo3 -> Foo4 : Simpan alias URL atau buat otomatis
+Foo3 -> Foo7 : Simpan tag (jika ada)
+Foo3 -> Foo8 : Kustomisasi warna QR Code (jika ada)
+Foo3 -> Foo4 : Tambahkan UTM parameters (jika ada)
+Foo4 -> Foo5 : Simpan URL pendek di database
+Foo5 -> Foo4 : Kembalikan status penyimpanan
+Foo4 -> Foo3 : Konfirmasi URL pendek berhasil dibuat
+Foo3 -> Foo2 : Kirim status berhasil
+Foo2 -> Foo1 : Tampilkan URL pendek dan QR Code
+@enduml

@@ -1,0 +1,32 @@
+@startuml
+
+start
+:Pengguna membuka halaman login;
+
+if (Pengguna sudah punya akun?) then (Ya)
+    :Masukkan Email & Password;
+    :Klik tombol Login;
+    if (Email & Password valid?) then (Ya)
+        :Autentikasi berhasil;
+        :Pengguna masuk ke sistem;
+    else (Tidak)
+        :Menampilkan pesan error;
+        stop
+    endif
+else (Tidak)
+    :Pengguna memilih Registrasi;
+    :Masukkan Email & Password;
+    :Klik tombol Registrasi;
+    if (Email sudah terdaftar?) then (Ya)
+        :Menampilkan pesan error;
+        stop
+    else (Tidak)
+        :Menyimpan data pengguna;
+        :Pengguna berhasil terdaftar;
+        :Pengguna masuk ke sistem;
+    endif
+endif
+
+stop
+
+@enduml

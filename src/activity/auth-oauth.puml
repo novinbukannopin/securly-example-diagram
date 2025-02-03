@@ -1,0 +1,26 @@
+@startuml
+
+start
+:Pengguna membuka halaman login;
+:Pengguna memilih "Login dengan Google";
+
+:Dialihkan ke halaman Google OAuth;
+:Pengguna memasukkan kredensial Google;
+
+if (Autentikasi Google Berhasil?) then (Ya)
+    :Mendapatkan token akses;
+    :Mengambil data pengguna dari Google;
+    if (Akun sudah ada di sistem?) then (Ya)
+        :Pengguna masuk ke sistem;
+    else (Tidak)
+        :Menyimpan data pengguna baru;
+        :Pengguna masuk ke sistem;
+    endif
+else (Tidak)
+    :Menampilkan pesan error;
+    stop
+endif
+
+stop
+
+@enduml

@@ -1,0 +1,23 @@
+@startuml
+
+start
+:Pengguna membuka halaman profil;
+:Pengguna memilih opsi "Edit Profil";
+
+:Pengguna mengubah nama;
+:Pengguna mengubah tanggal lahir;
+:Pengguna mengubah informasi lain (misalnya, email, alamat, dll.);
+
+:Pengguna menekan tombol "Simpan Perubahan";
+
+if (Data valid?) then (Ya)
+    :Sistem menyimpan perubahan profil ke database;
+    :Menampilkan pesan "Profil berhasil diperbarui";
+else (Tidak)
+    :Menampilkan pesan error "Data tidak valid";
+    stop
+endif
+
+stop
+
+@enduml

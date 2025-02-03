@@ -1,0 +1,23 @@
+@startuml
+actor       User        as Foo1
+boundary    RegistrationPage   as Foo2
+control     AuthControl        as Foo3
+entity      UserEntity         as Foo4
+database    UserDB             as Foo5
+
+Foo1 -> Foo2 : Masukkan email dan password
+Foo2 -> Foo3 : Kirim data ke kontroler
+Foo3 -> Foo4 : Cek apakah email sudah terdaftar
+alt Email sudah terdaftar
+    Foo4 -> Foo3 : Berikan pesan error
+    Foo3 -> Foo2 : Kirim pesan "Email sudah terdaftar"
+    Foo2 -> Foo1 : Tampilkan pesan error
+else Email belum terdaftar
+    Foo3 -> Foo4 : Simpan data pengguna baru
+    Foo4 -> Foo5 : Simpan data ke database
+    Foo5 -> Foo4 : Kembali status penyimpanan
+    Foo4 -> Foo3 : Konfirmasi registrasi berhasil
+    Foo3 -> Foo2 : Kirim status registrasi berhasil
+    Foo2 -> Foo1 : Akses sistem
+end
+@enduml

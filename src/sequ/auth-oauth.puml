@@ -1,0 +1,27 @@
+@startuml
+actor       User           as Foo1
+boundary    GoogleOAuth    as Foo2
+control     AuthControl    as Foo3
+entity      UserEntity     as Foo4
+database    UserDB         as Foo5
+
+Foo1 -> Foo2 : Pilih "Login dengan Google"
+Foo2 -> Foo3 : Arahkan ke Google OAuth
+Foo3 -> Foo2 : Kirim permintaan autentikasi
+Foo2 -> Foo1 : Masukkan kredensial Google
+Foo1 -> Foo2 : Kirim kredensial
+Foo2 -> Foo3 : Kirim token akses Google
+Foo3 -> Foo4 : Ambil data pengguna dari Google
+Foo4 -> Foo5 : Periksa apakah akun ada di database
+alt Akun sudah ada
+    Foo5 -> Foo4 : Kembalikan data pengguna
+    Foo4 -> Foo3 : Konfirmasi login berhasil
+    Foo3 -> Foo2 : Kirim status sukses
+    Foo2 -> Foo1 : Berikan akses ke aplikasi
+else Akun belum ada
+    Foo5 -> Foo4 : Simpan data pengguna baru
+    Foo4 -> Foo3 : Konfirmasi akun dibuat dan login berhasil
+    Foo3 -> Foo2 : Kirim status sukses
+    Foo2 -> Foo1 : Berikan akses ke aplikasi
+end
+@enduml

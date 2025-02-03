@@ -1,0 +1,19 @@
+@startuml
+
+start
+:Pengguna membuka halaman analitik;
+:Pengguna memilih URL yang ingin dianalisis;
+
+if (URL ditemukan?) then (Ya)
+    :Mengambil data analitik dari database;
+    :Menampilkan statistik utama (klik, lokasi, perangkat, referer, dsb.);
+
+    :Pengguna dapat memfilter data berdasarkan rentang waktu;
+else (Tidak)
+    :Menampilkan pesan error "URL tidak ditemukan";
+    stop
+endif
+
+stop
+
+@enduml

@@ -1,0 +1,194 @@
+@startuml
+
+' Define the classes based on your Prisma schema
+class URL {
+  +id: Int
+  +originalUrl: String
+  +type: LinkType
+  +score: Float
+  +createdAt: DateTime
+  +updatedAt: DateTime
+  +Review: List<Review>
+}
+
+class Review {
+  +id: Int
+  +urlId: Int
+  +userId: Int
+  +action: ReviewAction
+  +reason: String?
+  +evidence: String?
+  +status: ReviewStatus
+  +createdAt: DateTime
+  +updatedAt: DateTime
+}
+
+class User {
+  +id: Int
+  +email: String
+  +name: String?
+  +username: String?
+  +password: String?
+  +dob: DateTime?
+  +language: String?
+  +role: Role
+  +isEmailVerified: Boolean
+  +createdAt: DateTime
+  +updatedAt: DateTime
+  +Token: List<Token>
+  +Link: List<Link>
+  +OAuthAccount: List<OAuthAccount>
+  +Review: List<Review>
+}
+
+class OAuthAccount {
+  +id: Int
+  +provider: Provider
+  +userId: Int
+  +createdAt: DateTime
+  +updatedAt: DateTime
+}
+
+class Token {
+  +id: Int
+  +token: String
+  +type: TokenType
+  +expires: DateTime
+  +blacklisted: Boolean
+  +createdAt: DateTime
+  +userId: Int
+}
+
+class Link {
+  +id: Int
+  +originalUrl: String
+  +shortCode: String?
+  +type: LinkType?
+  +comments: String?
+  +userId: Int
+  +createdAt: DateTime
+  +updatedAt: DateTime
+  +deletedAt: DateTime?
+  +expiresAt: DateTime?
+  +expiredRedirectUrl: String?
+  +qrcode: String?
+  +Click: List<Click>
+  +TagLink: List<TagLink>
+  +UTM: UTM?
+}
+
+class Click {
+  +id: String
+  +linkId: Int
+  +timestamp: DateTime
+  +ip: String
+  +location: String?
+  +region: String?
+  +country: String?
+  +loc: String?
+  +org: String?
+  +postal: String?
+  +timezone: String?
+  +countryCode: String?
+  +userAgentId: String?
+}
+
+class UserAgent {
+  +id: String
+  +ua: String
+  +browser: String?
+  +browserVersion: String?
+  +os: String?
+  +osVersion: String?
+  +cpuArch: String?
+  +deviceType: String?
+  +engine: String?
+  +createdAt: DateTime
+}
+
+class Tag {
+  +id: Int
+  +name: String
+  +createdAt: DateTime
+  +updatedAt: DateTime
+}
+
+class TagLink {
+  +id: Int
+  +linkId: Int
+  +tagId: Int
+  +createdAt: DateTime
+  +updatedAt: DateTime
+}
+
+class UTM {
+  +id: Int
+  +linkId: Int
+  +source: String?
+  +medium: String?
+  +campaign: String?
+  +term: String?
+  +content: String?
+  +createdAt: DateTime
+  +updatedAt: DateTime
+  +deletedAt: DateTime?
+}
+
+' Define the relationships using the appropriate PlantUML symbols
+User "1" o-- "0..*" Token : "has"
+User "1" o-- "0..*" Link : "creates"
+User "1" o-- "0..*" OAuthAccount : "has"
+User "1" o-- "0..*" Review : "writes"
+OAuthAccount "1" -- "1" User : "belongs to"
+Link "1" *-- "0..*" Click : "receives"
+Link "1" o-- "0..*" TagLink : "has"
+Link "1" o-- "0..1" UTM : "has"
+Review "1" o-- "1" User : "written by"
+Review "1" o-- "1" URL : "reviews"
+TagLink "1" -- "1" Tag : "has"
+TagLink "1" -- "1" Link : "associated with"
+Click "1" -- "1" Link : "clicked on"
+Click "1" o-- "1" UserAgent : "has"
+UserAgent "1" o-- "0..*" Click : "tracks"
+
+' Enums
+enum LinkType {
+  BENIGN
+  MALICIOUS
+  DEFACEMENT
+  MALWARE
+  PHISHING
+  BLOCKED
+}
+
+enum ReviewAction {
+  APPROVE
+  REQUEST_REVIEW
+  REQUEST_UNBLOCK
+}
+
+enum ReviewStatus {
+  PENDING
+  APPROVED
+  REJECTED
+}
+
+enum Role {
+  USER
+  ADMIN
+}
+
+enum TokenType {
+  ACCESS
+  REFRESH
+  RESET_PASSWORD
+  VERIFY_EMAIL
+}
+
+enum Provider {
+  DEFAULT
+  GOOGLE
+  GITHUB
+}
+
+@enduml

@@ -1,21 +1,71 @@
 @startuml
+
+skinparam ActorStyle Stickman
 left to right direction
 
-package "Football Ticket Booking System" {
-    actor User
-    actor Admin
-    actor Guest
+actor "Pengguna" as User
 
-    User <|-- Admin : Specialization
-    User <|-- Guest : Specialization
-
-    (Book Ticket) <|-- (Book VIP Ticket) : Generalization
-    (Book Ticket) <|-- (Book Standard Ticket) : Generalization
-
-    User --> (Book Ticket)
-    Admin --> (Manage Matches)
-    Admin --> (Generate Reports)
-    Guest --> (Browse Matches)
+package "Autentikasi" {
+    usecase (Registrasi dengan Email & Password) as UC1
+    usecase (Login dengan Email & Password) as UC2
+    usecase (Login & Registrasi dengan Google OAuth) as UC3
+    usecase (Logout dari Sistem) as UC4
 }
+
+package "Manajemen Profil" {
+    usecase (Edit Profil) as UC5
+}
+
+package "Manajemen URL" {
+    (Membuat URL Pendek) as UC6
+    (Mengedit URL Pendek) as UC7
+    (Menghapus/Archive URL) as UC8
+    (Melihat Daftar URL) as UC9
+    (Menyalin URL Pendek) as UC10
+}
+package "Keamanan & Feedback" {
+    usecase (Melihat Alasan URL Diblokir) as UC17
+    usecase (Memberikan Feedback terhadap Deteksi URL) as UC18
+}
+
+package "Tampilan" {
+    usecase (Beralih antara Dark Mode dan Light Mode) as UC19
+}
+
+package "Fitur Tambahan" {
+    (Menyesuaikan Warna QR Code) as UC11
+    (Melihat Preview URL) as UC12
+    (Menambahkan UTM Parameters) as UC13
+}
+
+package "Analitik & Statistik" {
+    (Melihat Data Analitik URL) as UC14
+    (Melihat Statistik URL Terbaik) as UC15
+    (Melihat Kategori/Tag URL) as UC16
+}
+
+User --> UC1
+User --> UC2
+User --> UC3
+User --> UC4
+User --> UC5
+UC6 <-- User
+UC7 <-- User
+UC8 <-- User
+UC9 <-- User
+UC10 <-- User
+UC17 <-- User
+UC18 <-- User
+UC19 <-- User
+User --> UC11
+User --> UC12
+User --> UC13
+User --> UC14
+User --> UC15
+User --> UC16
+
+
+
+
 
 @enduml
