@@ -1,0 +1,62 @@
+@startuml
+!includeurl https://raw.githubusercontent.com/plantuml-stdlib/C4-PlantUML/master/C4_Component.puml
+
+LAYOUT_WITH_LEGEND()
+LAYOUT_TOP_DOWN()
+
+title Component Diagram for URL Shortening System
+
+Person(user, "User", "Uses the URL shortening service")
+
+System_Boundary(system, "URL Shortening System") {
+
+    Container_Boundary(webApp, "Web Application (React/Next.js)") {
+        Component(MainPage, "Main Page", "React", "Homepage for shortening URLs")
+        Component(URLForm, "URL Form", "React", "Form to input and shorten URLs")
+        Component(Dashboard, "Dashboard", "React", "Displays URL statistics")
+        Component(ProfilePage, "Profile Page", "React", "User account management")
+        Component(AnalyticsPage, "Analytics Page", "React", "Shows URL analytics")
+        Component(UTMComponent, "UTM Tracker", "React", "Handles UTM parameter tracking")
+        Component(AuthModule, "Auth Module", "OAuth2/JWT", "Handles authentication")
+        Component(QRCodeGenerator, "QR Code Generator", "JavaScript", "Generates QR codes")
+    }
+
+    Container_Boundary(api, "Backend API (Node.js/Express)") {
+        Component(UserService, "User Service", "Express", "Handles user authentication and profiles")
+        Component(TokenService, "Token Service", "Service", "Manages JWT tokens")
+        Component(LinkService, "Link Service", "Service", "Shortens and retrieves URLs")
+        Component(ReviewService, "Review Service", "Service", "Manages user feedback & reports")
+        Component(URLController, "URL Controller", "Express", "Processes URL requests")
+        Component(AuthMiddleware, "Auth Middleware", "Middleware", "Validates JWT tokens")
+        Component(Database, "PostgreSQL", "Database", "Stores users, URLs, reviews, analytics")
+    }
+
+    Container_Boundary(deepLearningAPI, "Deep Learning API (Python/Flask)") {
+        Component(RedisCache, "Redis Cache", "Redis", "Caches analysis results")
+        Component(SecurityCheck, "Security Check", "Flask", "Analyzes URLs for potential threats")
+    }
+}
+
+Rel(user, AuthModule, "Accesses", "HTTPS")
+Rel(user, MainPage, "Views", "HTTPS")
+Rel(URLForm, SecurityCheck, "Sends URL for analysis", "HTTP")
+Rel(SecurityCheck, RedisCache, "Caches results", "TCP")
+Rel_R(Dashboard, AnalyticsPage, "Views", "HTTPS")
+Rel(AuthModule, Dashboard, "Views", "HTTPS")
+Rel(Dashboard, URLForm, "Views", "HTTPS")
+Rel_R(Dashboard, ProfilePage, "Views", "HTTPS")
+Rel_R(URLForm, QRCodeGenerator, "Generates QR code", "HTTP")
+Rel(URLForm, UTMComponent, "Tracks UTM parameters", "HTTP")
+
+Rel(UserService, Database, "Reads/Writes", "JDBC, port 5432")
+Rel(TokenService, Database, "Reads/Writes", "JDBC, port 5432")
+Rel(LinkService, Database, "Reads/Writes", "JDBC, port 5432")
+Rel(ReviewService, Database, "Reads/Writes", "JDBC, port 5432")
+Rel(AuthMiddleware, URLController, "Validates", "HTTP")
+Rel(URLController, LinkService, "Calls", "HTTP")
+Rel(URLController, ReviewService, "Calls", "HTTP")
+Rel(URLController, UserService, "Calls", "HTTP")
+Rel(URLController, TokenService, "Calls", "HTTP")
+
+Rel_L(Dashboard, AuthMiddleware, "Validates", "HTTP")
+@enduml

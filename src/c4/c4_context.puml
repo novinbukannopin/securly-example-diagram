@@ -1,13 +1,12 @@
 @startuml
 !includeurl https://raw.githubusercontent.com/plantuml-stdlib/C4-PlantUML/master/C4_Context.puml
+AddRelTag("sync", $textColor="black", $lineColor="black", $lineStyle = DashedLine())
 
 title System Context Diagram for URL Shortening Service
 
 Person(user, "User", "A person using the URL shortening service")
-System_Boundary(system_boundary, "URL Shortening System") {
-  System(system, "URL Shortening System", "Allows users to shorten URLs and provides security analysis")
-}
+System(system, "URL Shortening System", "Allows users to shorten URLs and provides security analysis")
 
-Rel(user, system, "Uses", "HTTPS")
+Rel(user, system, "Uses", "HTTPS", $tags="sync")
 
 @enduml

@@ -1,27 +1,37 @@
 @startuml
 !includeurl https://raw.githubusercontent.com/plantuml-stdlib/C4-PlantUML/master/C4_Container.puml
+!define DEVICONS https://raw.githubusercontent.com/tupadr3/plantuml-icon-font-sprites/master/devicons
+!include DEVICONS/react.puml
+!include DEVICONS/python.puml
+!include DEVICONS/redis.puml
+!include DEVICONS/nodejs.puml
+!include DEVICONS/postgresql.puml
 
+AddRelTag("sync", $textColor="black", $lineColor="black", $lineStyle = DashedLine())
 title Container Diagram for URL Shortening Service
 
-AddElementTag("deepLearning", $shape=EightSidedShape(), $bgColor="CornflowerBlue", $fontColor="white", $legendText="Deep Learning Service")
-AddElementTag("api", $shape=RoundedBoxShape(), $bgColor="lightSkyBlue", $fontColor="white")
-
+LAYOUT_TOP_DOWN()
 SHOW_PERSON_OUTLINE()
+LAYOUT_WITH_LEGEND()
 
 Person(user, "User", "A person using the URL shortening service")
 
-System_Boundary(c1, "URL Shortening System") {
-    Container(webApp, "Web Application", "React/Next.js", "User interface for URL shortening and security analysis")
-    Container(api, "API", "Node.js/Express", "Handles URL shortening, authentication, and feedback", $tags = "api")
-    Container(deepLearningAPI, "Deep Learning API", "Python/Flask", "Detects URL security using a deep learning model", $tags = "deepLearning")
-    Container(redis, "Redis", "In-Memory Database", "Rate limiter for API requests")
-    ContainerDb(db, "Database", "PostgreSQL", "Stores user data, URLs, reviews, and analytics")
+System_Ext(googleOAuth, "Google OAuth", "External authentication provider")
+
+System(system, "URL Shortening System", "Allows users to shorten URLs and provides security analysis") {
+    Container(webApp, "Web Application", "React/Next.js", "User interface for URL shortening and security analysis", $sprite="react", $tags = "web")
+    Container(api, "API", "Node.js/Express", "Handles URL shortening, authentication, and feedback", $tags = "api", $sprite="nodejs")
+    Container(deepLearningAPI, "Deep Learning API", "Python/Flask", "Detects URL security using a deep learning model", $tags = "deepLearning", $sprite="python")
+    Container(redis, "Redis", "In-Memory Database", "Rate limiter for API requests", $tags = "cache", $sprite="redis")
+    ContainerDb(db, "Database", "PostgreSQL", "Stores user data, URLs, reviews, and analytics", $tags = "db", $sprite="postgresql")
 }
 
-Rel(user, webApp, "Uses", "HTTPS")
-Rel(webApp, api, "Makes API calls to")
-Rel(api, db, "Reads from and writes to", "SQL/JDBC, port 5432")
-Rel(api, deepLearningAPI, "Sends URL for security analysis")
-Rel(deepLearningAPI, redis, "Uses Redis for caching results")
+Rel(user, webApp, "Uses", "HTTPS", $tags="sync")
+Rel_Left(webApp, googleOAuth, "Authenticates with", "OAuth2", $tags="sync")
+Rel_Right(api, googleOAuth, "Validates tokens via", "OAuth2", $tags="sync")
+Rel_Down(webApp, api, "Makes API calls to", $tags="sync")
+Rel_Down(deepLearningAPI, redis, "Uses Redis for caching results", $tags="sync")
+Rel_Down(api, db, "Reads from and writes to", "SQL/JDBC, port 5432", $tags="sync")
+Rel_Left(webApp, deepLearningAPI, "Sends URL for security analysis", $tags="sync")
 
 @enduml
